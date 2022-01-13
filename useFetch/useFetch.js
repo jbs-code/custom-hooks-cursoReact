@@ -1,44 +1,45 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react'
 
+const useFetch = (url) => {
+    const [state, setState] = useState({data: null, loading: true, error:null});
 
-export const useFetch = ( url ) => {
-    
+    //Todo lo referente a isMounted es para evitar errores por
+    //realizar acciones sobre este componete cuando no esté montado
     const isMounted = useRef(true);
-    const [state, setState] = useState({ data: null, loading: true, error: null });
 
-    useEffect( () => {
-        return () => {
+    useEffect(() => {
+        return () =>{
             isMounted.current = false;
         }
-    }, [])
+    });
 
+    useEffect(() => {
 
-    useEffect( () => {
+        setState({data: null, loading: true, error:null});
+        
+        fetch(url)
+        .then(resp => resp.json())
+        .then(data => {
 
-        setState({ data: null, loading: true, error: null });
-
-        fetch( url )
-            .then( resp => resp.json() )
-            .then( data => {
-
-                if ( isMounted.current ) {
-                    setState({
-                        loading: false,
-                        error: null,
-                        data
-                    });
-                }
-
-            })
-            .catch( () => {
+            if(isMounted) {
                 setState({
-                    data: null,
+                    data: data,
                     loading: false,
-                    error: 'No se pudo cargar la info'
+                    error: null
                 })
-            })
+            }
 
-    },[url])
+        }
+        ,[]).catch(()=>{
+            setState({
+                data: null,
+                loading: true,
+                error: 'No se pudo obtener la información'
+            });
+        });
+    }, [url]);
 
     return state;
 }
+
+export default useFetch;
