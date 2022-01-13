@@ -1,5 +1,5 @@
 # Notas
 
-Este repositorio contiene varios customHooks para ayudarme a mi y a quien le sirva, estos hooks.
+Este repositorio contiene varios customHooks que estudié en el curso de React.
 
-También la idea es que yo no quiero volver a escribirlos!
+Para no tener que volver a escribirlos los guardo aquí.
